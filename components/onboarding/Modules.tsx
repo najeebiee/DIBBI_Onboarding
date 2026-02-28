@@ -25,7 +25,7 @@ const modules = [
 
 export default function Modules() {
   return (
-    <section className="py-14 sm:py-16">
+    <section id="modules" className="py-14 sm:py-16">
       <div className="mx-auto max-w-5xl">
         <h2 className="text-center text-3xl font-bold uppercase tracking-wide text-slate-900 sm:text-4xl">
           What You Will Master
@@ -52,7 +52,7 @@ export default function Modules() {
                   Module {index + 1}: {module.title.split(": ")[1]}
                 </h3>
                 <p className="flex items-start gap-2 text-slate-700">
-                  <span className="mt-0.5 text-base font-bold text-blue-700">?</span>
+                  <span className="mt-0.5 text-base font-bold text-blue-700">✓</span>
                   <span>{module.bullet}</span>
                 </p>
               </div>

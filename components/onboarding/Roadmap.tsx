@@ -25,10 +25,13 @@ const roadmapItems = [
 
 export default function Roadmap() {
   return (
-    <section className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-blue-900 px-4 py-16 text-white sm:py-20">
+    <section
+      id="roadmap"
+      className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-[#060B3A] px-4 py-16 text-white sm:py-20"
+    >
       <div className="mx-auto w-full max-w-6xl">
         <h2 className="text-3xl font-bold sm:text-4xl">Your Complete Onboarding Roadmap</h2>
-        <p className="mt-3 max-w-3xl text-blue-100 sm:text-lg">
+        <p className="mt-3 max-w-3xl text-white/80 sm:text-lg">
           Move through each stage with clear expectations, practical assignments, and
           momentum-focused milestones.
         </p>
@@ -48,7 +51,7 @@ export default function Roadmap() {
               />
               <div className="px-5 py-5">
                 <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                <p className="mt-3 flex gap-2 text-blue-100">
+                <p className="mt-3 flex gap-2 text-white/80">
                   <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-yellow-300" />
                   <span>{item.description}</span>
                 </p>

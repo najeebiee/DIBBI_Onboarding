@@ -7,7 +7,7 @@ const benefits = [
 
 export default function Benefits() {
   return (
-    <section className="py-14 sm:py-16">
+    <section id="benefits" className="py-14 sm:py-16">
       <div className="mx-auto max-w-4xl">
         <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl">
           Why Become a Lieutenant?
@@ -25,7 +25,7 @@ export default function Benefits() {
         <div className="mt-10 flex justify-center">
           <button
             type="button"
-            className="w-full max-w-2xl rounded-full bg-yellow-400 px-8 py-4 text-center text-lg font-semibold text-slate-900 shadow-md transition hover:brightness-105"
+            className="w-full max-w-2xl rounded-full bg-[#F5C400] px-8 py-4 text-center text-lg font-extrabold text-[#0B0F2E] shadow-lg transition hover:brightness-105"
           >
             Yes, Unlock My Dashboard & Certification
           </button>
