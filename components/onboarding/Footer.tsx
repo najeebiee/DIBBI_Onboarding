@@ -1,9 +1,17 @@
+import Image from "next/image";
+
 export default function Footer() {
   return (
-    <footer className="relative left-1/2 right-1/2 -mx-[50vw] mt-6 w-screen bg-slate-950 px-4 py-8 text-slate-200">
-      <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-3 text-center sm:flex-row sm:justify-between sm:text-left">
-        <p className="text-lg font-semibold tracking-wide">DIBBI</p>
-        <p className="text-sm text-slate-300">
+    <footer className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-[#031033] px-4 py-8 text-white sm:py-10">
+      <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-4 text-center">
+        <Image
+          src="/onboarding/dibbi_logo.png"
+          alt="DIBBI logo"
+          width={120}
+          height={37}
+          className="h-[37px] w-[120px]"
+        />
+        <p className="text-[16px] text-white">
           DIBBI Copyright 2026 | Privacy Policy | Terms
         </p>
       </div>

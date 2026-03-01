@@ -2,24 +2,28 @@ import Image from "next/image";
 
 const roadmapItems = [
   {
-    title: "Orientation & Setup",
-    description: "Get your dashboard configured and understand the certification journey.",
-    image: "/onboarding/hero-mockup.png",
+    title: "Welcome Telegram Group",
+    description:
+      "Connect with other distributors and get real-time updates from the leadership team.",
+    image: "/onboarding/roadmap-1.jpg",
   },
   {
-    title: "Skill Block: Outreach",
-    description: "Learn the messaging frameworks and cadences used by top performers.",
-    image: "/onboarding/module-1.jpg",
+    title: "Business Certification #1:",
+    description:
+      'The essential "getting started" guide. Learn how to navigate the system and set up your payouts.',
+    image: "/onboarding/roadmap-2.jpg",
   },
   {
-    title: "Skill Block: Qualification",
-    description: "Practice lead qualification so you spend time on real opportunities.",
-    image: "/onboarding/module-2.jpg",
+    title: "Product Specialist Certification: Product Knowledge",
+    description:
+      "Deep dive into the science and benefits of our products so you can recommend them with confidence.",
+    image: "/onboarding/roadmap-3.jpg",
   },
   {
-    title: "Certification Sprint",
-    description: "Complete checkpoints, submit milestones, and unlock your next level.",
-    image: "/onboarding/module-3.jpg",
+    title: "Online Marketing Certification:",
+    description:
+      "A simple, step-by-step guide to finding customers on Social Media, even if you have zero experience.",
+    image: "/onboarding/roadmap-4.jpg",
   },
 ];
 
@@ -27,35 +31,35 @@ export default function Roadmap() {
   return (
     <section
       id="roadmap"
-      className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-[#060B3A] px-4 py-16 text-white sm:py-20"
+      className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-[#0A19D1] px-4 py-16 text-white sm:py-20"
     >
-      <div className="mx-auto w-full max-w-6xl">
-        <h2 className="text-3xl font-bold sm:text-4xl">Your Complete Onboarding Roadmap</h2>
-        <p className="mt-3 max-w-3xl text-white/80 sm:text-lg">
-          Move through each stage with clear expectations, practical assignments, and
-          momentum-focused milestones.
+      <div className="mx-auto w-full max-w-5xl">
+        <h2 className="text-center text-3xl font-extrabold md:text-4xl lg:text-[50px]">
+          Your Complete Onboarding Roadmap
+        </h2>
+        <p className="mx-auto mt-5 max-w-4xl text-center text-sm leading-relaxed text-white/90 md:text-base lg:text-[18px]">
+          Getting certified as a Lead Generator is just the beginning. Here is exactly
+          what else you will unlock inside your Onboarding Dashboard:
         </p>
 
-        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2">
+        <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2">
           {roadmapItems.map((item) => (
-            <article
-              key={item.title}
-              className="overflow-hidden rounded-2xl border border-blue-700/60 bg-blue-950/40"
-            >
+            <article key={item.title} className="mx-auto w-full max-w-[680px] space-y-4">
               <Image
                 src={item.image}
                 alt={item.title}
                 width={960}
                 height={540}
-                className="h-44 w-full object-cover"
+                className="h-auto w-full rounded-xl object-contain"
               />
-              <div className="px-5 py-5">
-                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                <p className="mt-3 flex gap-2 text-white/80">
-                  <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-yellow-300" />
-                  <span>{item.description}</span>
-                </p>
-              </div>
+              <p className="flex gap-3 text-sm leading-relaxed text-white md:text-base lg:text-[18px]">
+                <span className="mt-2 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#F5C400] text-[10px] font-bold text-[#0B0F2E]">
+                  ✓
+                </span>
+                <span>
+                  <strong>{item.title}</strong> {item.description}
+                </span>
+              </p>
             </article>
           ))}
         </div>
