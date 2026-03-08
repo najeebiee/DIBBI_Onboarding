@@ -4,11 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import type { Session } from "@supabase/supabase-js";
 import { usernameToInternalEmail } from "@/lib/auth/usernameToInternalEmail";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 
 const INVALID_CREDENTIALS_MESSAGE =
   "Invalid username or password. Please try again.";
+
+function setServerAuthCookie(session: Session) {
+  const maxAge = session.expires_in ?? 3600;
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `dibbi-access-token=${session.access_token}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`;
+}
 
 export default function LoginForm() {
   const router = useRouter();
@@ -33,7 +40,7 @@ export default function LoginForm() {
         return;
       }
 
-      const { error } = await supabaseBrowser.auth.signInWithPassword({
+      const { data, error } = await supabaseBrowser.auth.signInWithPassword({
         email,
         password,
       });
@@ -42,6 +49,10 @@ export default function LoginForm() {
         setErrorMessage(INVALID_CREDENTIALS_MESSAGE);
         setIsSubmitting(false);
         return;
+      }
+
+      if (data.session?.access_token) {
+        setServerAuthCookie(data.session);
       }
 
       void keepLoggedIn;
@@ -155,4 +166,3 @@ export default function LoginForm() {
     </div>
   );
 }
-
