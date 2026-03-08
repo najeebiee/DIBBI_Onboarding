@@ -16,7 +16,7 @@ function truncateDescription(text: string | null): string {
 
 export default function CourseCard({ course, isExploreTab }: CourseCardProps) {
   const ctaLabel = course.isUnlocked ? "Open" : "Get Access";
-  const ctaHref = course.isUnlocked ? `/courses/${course.slug}` : "/pay";
+  const ctaHref = course.isUnlocked ? `/course/${course.slug}` : "/pay";
   const description = truncateDescription(course.description);
 
   return (
