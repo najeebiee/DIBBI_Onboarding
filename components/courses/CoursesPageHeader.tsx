@@ -17,6 +17,15 @@ function buildTabHref(tab: CoursesTab, query: string) {
   return `/courses?${params.toString()}`;
 }
 
+function buildTopCoursesHref(query: string) {
+  const params = new URLSearchParams();
+  params.set("tab", "enrollments");
+  if (query.trim()) {
+    params.set("q", query.trim());
+  }
+  return `/courses?${params.toString()}`;
+}
+
 function tabClass(isActive: boolean) {
   if (isActive) {
     return "relative py-5 text-[15px] font-semibold text-[#102754] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-full after:bg-[#0b63ff]";
@@ -29,10 +38,12 @@ export default function CoursesPageHeader({
   query,
   userInitial,
 }: CoursesPageHeaderProps) {
+  const shellClass = "mx-auto w-full max-w-screen-2xl px-4 sm:px-6 lg:px-10";
+
   return (
-    <header className="w-full border-b border-[#d6deec] shadow-[0_6px_20px_rgba(15,40,87,0.06)]">
+    <header className="w-full overflow-hidden border-b border-[#d6deec] bg-white shadow-[0_6px_20px_rgba(15,40,87,0.06)]">
       <div className="bg-[#081f5a]">
-        <div className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-10">
+        <div className={`${shellClass} flex h-16 items-center justify-between`}>
           <Link href="/courses?tab=enrollments" className="inline-flex items-center">
             <Image
               src="/onboarding/dibbi_logo.png"
@@ -45,7 +56,10 @@ export default function CoursesPageHeader({
           </Link>
 
           <div className="flex items-center gap-4 sm:gap-5">
-            <div className="inline-flex items-center gap-2 text-sm font-semibold text-white/95">
+            <Link
+              href={buildTopCoursesHref(query)}
+              className="inline-flex items-center gap-2 rounded-md bg-white/15 px-3 py-1.5 text-sm font-semibold text-white"
+            >
               <svg
                 aria-hidden="true"
                 viewBox="0 0 24 24"
@@ -55,7 +69,7 @@ export default function CoursesPageHeader({
                 <path d="M4 6h16M4 12h16M4 18h10" />
               </svg>
               <span className="hidden sm:inline">Courses</span>
-            </div>
+            </Link>
 
             <button
               type="button"
@@ -76,26 +90,14 @@ export default function CoursesPageHeader({
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/25 text-xs font-bold text-white">
               {userInitial}
             </span>
-
-            <button
-              type="button"
-              className="inline-flex items-center gap-1 text-sm font-semibold text-white/95"
-            >
-              EN
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 20 20"
-                className="h-4 w-4 fill-current"
-              >
-                <path d="M5.5 7.5 10 12l4.5-4.5" />
-              </svg>
-            </button>
           </div>
         </div>
       </div>
 
       <div className="bg-white">
-        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-3 px-4 py-3 sm:px-6 lg:px-10 xl:h-[70px] xl:flex-row xl:items-center xl:justify-between xl:py-0">
+        <div
+          className={`${shellClass} flex flex-col gap-3 py-3 xl:h-[70px] xl:flex-row xl:items-center xl:justify-between xl:py-0`}
+        >
           <nav className="flex items-center gap-8">
             <Link href={buildTabHref("enrollments", query)} className={tabClass(activeTab === "enrollments")}>
               Enrollments

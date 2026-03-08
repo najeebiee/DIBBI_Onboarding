@@ -64,7 +64,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
         query={query}
         userInitial={getUserInitial(user.email)}
       />
-      <section className="mx-auto w-full max-w-[1440px] px-4 pb-12 pt-8 sm:px-6 lg:px-10">
+      <section className="mx-auto w-full max-w-screen-2xl px-4 pb-12 pt-8 sm:px-6 lg:px-10">
         <CourseGrid courses={courses} tab={activeTab} query={query} />
       </section>
     </main>

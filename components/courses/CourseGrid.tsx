@@ -26,7 +26,7 @@ export default function CourseGrid({ courses, tab, query }: CourseGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
       {courses.map((course) => (
         <CourseCard key={course.id} course={course} isExploreTab={tab === "explore"} />
       ))}
