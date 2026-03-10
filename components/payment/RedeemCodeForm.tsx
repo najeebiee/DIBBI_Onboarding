@@ -2,10 +2,8 @@
 
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import {
-  initialRedeemCodeState,
-  redeemCodeAction,
-} from "@/app/redeem-code/actions";
+import { redeemCodeAction } from "@/app/redeem-code/actions";
+import { initialRedeemCodeState } from "@/app/redeem-code/state";
 
 function RedeemSubmitButton() {
   const { pending } = useFormStatus();

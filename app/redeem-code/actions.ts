@@ -8,14 +8,7 @@ import {
   getServerAccessToken,
 } from "@/lib/supabase/server";
 import { normalizeAccessCode } from "@/lib/xendit/utils";
-
-export type RedeemCodeActionState = {
-  error: string | null;
-};
-
-export const initialRedeemCodeState: RedeemCodeActionState = {
-  error: null,
-};
+import type { RedeemCodeActionState } from "./state";
 
 async function upsertUserCourseAccess(params: {
   userId: string;
@@ -93,6 +86,11 @@ export async function redeemCodeAction(
     .maybeSingle();
 
   if (claimResult.error) {
+    console.error("Redeem code claim failed", {
+      code,
+      userId,
+      error: claimResult.error.message,
+    });
     return { error: "Unable to redeem code right now. Please try again." };
   }
 
@@ -106,6 +104,11 @@ export async function redeemCodeAction(
       .maybeSingle();
 
     if (existingCode.error) {
+      console.error("Redeem code validation failed", {
+        code,
+        userId,
+        error: existingCode.error.message,
+      });
       return { error: "Unable to validate access code." };
     }
 
@@ -127,7 +130,13 @@ export async function redeemCodeAction(
 
   try {
     await upsertUserCourseAccess({ userId, courseId });
-  } catch {
+  } catch (error) {
+    console.error("Redeem code access upsert failed", {
+      code,
+      userId,
+      courseId,
+      error: error instanceof Error ? error.message : String(error),
+    });
     return { error: "Code accepted but failed to unlock the course. Please contact support." };
   }
 
@@ -138,6 +147,14 @@ export async function redeemCodeAction(
     .maybeSingle();
 
   if (courseResult.error || !courseResult.data?.slug) {
+    if (courseResult.error) {
+      console.error("Redeem code course lookup failed", {
+        code,
+        userId,
+        courseId,
+        error: courseResult.error.message,
+      });
+    }
     redirect("/courses?tab=enrollments");
   }
 
