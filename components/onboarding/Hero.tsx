@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import CheckoutForm from "@/components/payment/CheckoutForm";
+
+const COURSE_SLUG = "dibbi-onboarding-certification";
 
 export default function Hero() {
-  const router = useRouter();
-
   return (
     <section
       id="top"
@@ -18,8 +18,8 @@ export default function Hero() {
         </h1>
         <p className="mt-6 max-w-4xl text-base leading-snug text-white/80 md:text-xl lg:text-[30px]">
           Master the #1 skill in network marketing, filling the room with qualified
-          prospects for official GutGuard events, without ever feeling \"pushy\" or
-          \"salesy.\"
+          prospects for official GutGuard events, without ever feeling &quot;pushy&quot; or
+          &quot;salesy.&quot;
         </p>
         <p className="mt-6 max-w-3xl text-base italic leading-snug text-white/80 md:text-xl lg:text-[30px]">
           Enroll today to unlock your private dashboard, access your training, and join
@@ -37,13 +37,15 @@ export default function Hero() {
           />
         </div>
 
-        <button
-          type="button"
-          onClick={() => router.push("/pay")}
-          className="mt-8 w-full max-w-md rounded-full bg-[#F5C400] px-6 py-3 text-center text-base font-extrabold text-[#0B0F2E] shadow-lg transition hover:brightness-105 md:max-w-2xl md:px-8 md:py-4 md:text-lg lg:mt-10 lg:max-w-4xl lg:py-5 lg:text-xl"
-        >
-          Get Instant Access & Start My Certification for P499
-        </button>
+        <div className="mt-8 w-full max-w-md md:max-w-2xl lg:mt-10 lg:max-w-4xl">
+          <CheckoutForm
+            courseSlug={COURSE_SLUG}
+            buttonLabel="Get Instant Access & Start My Certification for P499"
+            wrapperClassName="w-full"
+            inputClassName="h-12 w-full rounded-full border border-white/45 bg-white px-5 text-sm font-medium text-[#0B0F2E] outline-none transition focus:border-[#F5C400] focus:ring-2 focus:ring-[#F5C400]/35 disabled:cursor-not-allowed disabled:opacity-60 md:h-14 md:text-base"
+            buttonClassName="mt-3 w-full rounded-full bg-[#F5C400] px-6 py-3 text-center text-base font-extrabold text-[#0B0F2E] shadow-lg transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-70 md:px-8 md:py-4 md:text-lg lg:py-5 lg:text-xl"
+          />
+        </div>
       </div>
     </section>
   );

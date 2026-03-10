@@ -7,7 +7,7 @@ export default function Intro() {
         </h2>
         <div className="mx-auto mt-8 max-w-3xl space-y-5 text-left text-sm leading-7 text-slate-700 md:text-base lg:text-[18px]">
           <p>
-            The "Lieutenant" rank is designed to take the pressure off.
+            The &quot;Lieutenant&quot; rank is designed to take the pressure off.
           </p>
           <p>
             Your only goal is to become a <strong>master at bringing people</strong>{" "}

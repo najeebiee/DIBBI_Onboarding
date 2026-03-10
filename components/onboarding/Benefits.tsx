@@ -59,7 +59,7 @@ export default function Benefits() {
 
         <div className="mt-10 flex justify-center">
           <Link
-            href="/pay"
+            href="#top"
             className="mt-8 w-full max-w-md rounded-full bg-[#F5C400] px-6 py-3 text-center text-base font-extrabold text-[#0B0F2E] shadow-lg transition hover:brightness-105 md:max-w-2xl md:px-8 md:py-4 md:text-lg lg:mt-10 lg:max-w-4xl lg:py-5 lg:text-xl"
           >
             Yes, Unlock My Dashboard & Certification
