@@ -166,6 +166,10 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
   }
 
   const accessCode = codeResult.data?.code ?? null;
+  const encodedAccessCode = accessCode ? encodeURIComponent(accessCode) : null;
+  const loginHref = encodedAccessCode ? `/login?code=${encodedAccessCode}` : "/login";
+  const signupHref = encodedAccessCode ? `/signup?code=${encodedAccessCode}` : "/signup";
+  const redeemHref = encodedAccessCode ? `/redeem-code?code=${encodedAccessCode}` : "/redeem-code";
 
   return (
     <main className="min-h-screen bg-slate-50 px-6 py-16">
@@ -192,19 +196,19 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
 
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
-            href="/login"
+            href={loginHref}
             className="rounded-lg bg-[#0b63ff] px-4 py-2 text-sm font-semibold text-white transition hover:brightness-105"
           >
             Login
           </Link>
           <Link
-            href="/signup"
+            href={signupHref}
             className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
           >
             Sign up
           </Link>
           <Link
-            href="/redeem-code"
+            href={redeemHref}
             className="rounded-lg bg-[#16A34A] px-4 py-2 text-sm font-semibold text-white transition hover:brightness-105"
           >
             Redeem code

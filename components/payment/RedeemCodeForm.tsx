@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { redeemCodeAction } from "@/app/redeem-code/actions";
 import { initialRedeemCodeState } from "@/app/redeem-code/state";
+import { normalizeAccessCode } from "@/lib/xendit/utils";
 
 function RedeemSubmitButton() {
   const { pending } = useFormStatus();
@@ -19,8 +21,17 @@ function RedeemSubmitButton() {
   );
 }
 
-export default function RedeemCodeForm() {
+type RedeemCodeFormProps = {
+  defaultCode?: string;
+};
+
+export default function RedeemCodeForm({ defaultCode = "" }: RedeemCodeFormProps) {
   const [state, formAction] = useActionState(redeemCodeAction, initialRedeemCodeState);
+  const [code, setCode] = useState(defaultCode);
+
+  useEffect(() => {
+    setCode(defaultCode);
+  }, [defaultCode]);
 
   return (
     <form action={formAction} noValidate>
@@ -33,6 +44,8 @@ export default function RedeemCodeForm() {
         type="text"
         autoComplete="off"
         placeholder="DIBBI-XXXXXX"
+        value={code}
+        onChange={(event) => setCode(normalizeAccessCode(event.target.value))}
         className="h-12 w-full rounded-md border border-slate-300 bg-[#f6f8fb] px-3.5 text-[15px] uppercase text-slate-900 outline-none transition focus:border-[#142d63] focus:ring-2 focus:ring-[#142d63]/15"
         required
       />

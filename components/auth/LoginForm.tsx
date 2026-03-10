@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { Session } from "@supabase/supabase-js";
 import { usernameToInternalEmail } from "@/lib/auth/usernameToInternalEmail";
 import { supabaseBrowser } from "@/lib/supabase/browser";
@@ -19,11 +19,13 @@ function setServerAuthCookie(session: Session) {
 
 export default function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const code = searchParams.get("code")?.trim() ?? "";
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -56,7 +58,8 @@ export default function LoginForm() {
       }
 
       void keepLoggedIn;
-      router.replace("/courses");
+      const nextPath = code ? `/redeem-code?code=${encodeURIComponent(code)}` : "/courses";
+      router.replace(nextPath);
       router.refresh();
     } catch {
       setErrorMessage(INVALID_CREDENTIALS_MESSAGE);
@@ -162,6 +165,16 @@ export default function LoginForm() {
         >
           {isSubmitting ? "Signing in..." : "Login"}
         </button>
+
+        <p className="mt-4 text-center text-sm text-slate-600">
+          Need an account?{" "}
+          <Link
+            href={code ? `/signup?code=${encodeURIComponent(code)}` : "/signup"}
+            className="font-semibold text-[#0b5cff] underline-offset-2 hover:underline"
+          >
+            Sign up
+          </Link>
+        </p>
       </form>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { normalizeUsernameForAuth } from "@/lib/auth/usernameToInternalEmail";
 
 type SignupResponse = {
@@ -12,12 +12,14 @@ type SignupResponse = {
 
 export default function SignupForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const code = searchParams.get("code")?.trim() ?? "";
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -60,7 +62,12 @@ export default function SignupForm() {
         return;
       }
 
-      router.replace("/login?signup=success");
+      const loginParams = new URLSearchParams({ signup: "success" });
+      if (code) {
+        loginParams.set("code", code);
+      }
+
+      router.replace(`/login?${loginParams.toString()}`);
       router.refresh();
     } catch {
       setErrorMessage("Unexpected error creating account.");
@@ -166,7 +173,10 @@ export default function SignupForm() {
 
         <p className="mt-4 text-center text-sm text-slate-600">
           Already have an account?{" "}
-          <Link href="/login" className="font-semibold text-[#0b5cff] underline-offset-2 hover:underline">
+          <Link
+            href={code ? `/login?code=${encodeURIComponent(code)}` : "/login"}
+            className="font-semibold text-[#0b5cff] underline-offset-2 hover:underline"
+          >
             Login
           </Link>
         </p>

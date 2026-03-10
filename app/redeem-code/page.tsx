@@ -5,20 +5,30 @@ import {
   createServerSupabaseClient,
   getServerAccessToken,
 } from "@/lib/supabase/server";
+import { normalizeAccessCode } from "@/lib/xendit/utils";
 
-export default async function RedeemCodePage() {
+type RedeemCodePageProps = {
+  searchParams: Promise<{
+    code?: string;
+  }>;
+};
+
+export default async function RedeemCodePage({ searchParams }: RedeemCodePageProps) {
+  const params = await searchParams;
+  const code = normalizeAccessCode(params.code?.trim() ?? "");
+  const loginHref = code ? `/login?code=${encodeURIComponent(code)}` : "/login";
   const cookieStore = await cookies();
   const accessToken = getServerAccessToken(cookieStore);
 
   if (!accessToken) {
-    redirect("/login");
+    redirect(loginHref);
   }
 
   const supabase = createServerSupabaseClient(accessToken);
   const userResult = await supabase.auth.getUser(accessToken);
 
   if (userResult.error || !userResult.data.user) {
-    redirect("/login");
+    redirect(loginHref);
   }
 
   return (
@@ -33,7 +43,7 @@ export default async function RedeemCodePage() {
           </p>
 
           <div className="mt-8">
-            <RedeemCodeForm />
+            <RedeemCodeForm defaultCode={code} />
           </div>
         </div>
       </div>
