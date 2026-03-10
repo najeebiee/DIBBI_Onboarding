@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { normalizeUsernameForAuth } from "@/lib/auth/usernameToInternalEmail";
 
 type SignupResponse = {
@@ -10,16 +10,19 @@ type SignupResponse = {
   error?: string;
 };
 
-export default function SignupForm() {
+type SignupFormProps = {
+  defaultCode?: string;
+};
+
+export default function SignupForm({ defaultCode = "" }: SignupFormProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const code = searchParams.get("code")?.trim() ?? "";
+  const code = defaultCode.trim();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

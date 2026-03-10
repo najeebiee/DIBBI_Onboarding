@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import type { Session } from "@supabase/supabase-js";
 import { usernameToInternalEmail } from "@/lib/auth/usernameToInternalEmail";
 import { supabaseBrowser } from "@/lib/supabase/browser";
@@ -17,15 +17,18 @@ function setServerAuthCookie(session: Session) {
   document.cookie = `dibbi-access-token=${session.access_token}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`;
 }
 
-export default function LoginForm() {
+type LoginFormProps = {
+  defaultCode?: string;
+};
+
+export default function LoginForm({ defaultCode = "" }: LoginFormProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const code = searchParams.get("code")?.trim() ?? "";
+  const code = defaultCode.trim();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
