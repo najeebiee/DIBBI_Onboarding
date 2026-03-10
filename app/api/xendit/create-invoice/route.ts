@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase/service-role";
-import { generateOrderExternalId } from "@/lib/xendit/utils";
+import {
+  buildXenditRedirectUrl,
+  generateOrderExternalId,
+} from "@/lib/xendit/utils";
 
 type CreateInvoiceBody = {
   courseSlug?: string;
@@ -132,8 +135,8 @@ export async function POST(request: Request) {
 
     createdOrderId = order.id;
 
-    const successUrl = `${appUrl}/payment/success?external_id=${encodeURIComponent(order.external_id)}`;
-    const failedUrl = `${appUrl}/payment/failed?external_id=${encodeURIComponent(order.external_id)}`;
+    const successUrl = buildXenditRedirectUrl(appUrl, "/payment/success", order.external_id);
+    const failedUrl = buildXenditRedirectUrl(appUrl, "/payment/failed", order.external_id);
     const auth = Buffer.from(`${secretKey}:`).toString("base64");
 
     const xenditResponse = await fetch("https://api.xendit.co/v2/invoices", {

@@ -32,6 +32,17 @@ export function generateOrderExternalId(courseSlug: string): string {
   return `ORDER-${cleanedSlug}-${suffix}`;
 }
 
+export function buildXenditRedirectUrl(
+  appUrl: string,
+  route: "/payment/success" | "/payment/failed",
+  externalId: string,
+): string {
+  const normalizedAppUrl = appUrl.replace(/\/+$/, "");
+  const encodedExternalId = encodeURIComponent(externalId);
+
+  return `${normalizedAppUrl}${route}?external_id=${encodedExternalId}`;
+}
+
 export function normalizeOrderStatus(status: string | null | undefined):
   | "pending"
   | "paid"
