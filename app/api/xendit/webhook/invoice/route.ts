@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sendCourseAccessCodeEmail } from "@/lib/email/sendCourseAccessCodeEmail";
 import { createServiceRoleClient } from "@/lib/supabase/service-role";
 import { generateCourseAccessCode, normalizeOrderStatus } from "@/lib/xendit/utils";
 
@@ -16,6 +17,7 @@ type CourseOrderRow = {
   course_id: string;
   buyer_email: string;
   status: string;
+  raw_payload: unknown;
 };
 
 async function findOrder(payload: InvoiceWebhookPayload): Promise<CourseOrderRow | null> {
@@ -24,7 +26,7 @@ async function findOrder(payload: InvoiceWebhookPayload): Promise<CourseOrderRow
   if (payload.id) {
     const byInvoice = await supabase
       .from("course_orders")
-      .select("id, course_id, buyer_email, status")
+      .select("id, course_id, buyer_email, status, raw_payload")
       .eq("xendit_invoice_id", payload.id)
       .maybeSingle();
 
@@ -40,7 +42,7 @@ async function findOrder(payload: InvoiceWebhookPayload): Promise<CourseOrderRow
   if (payload.external_id) {
     const byExternal = await supabase
       .from("course_orders")
-      .select("id, course_id, buyer_email, status")
+      .select("id, course_id, buyer_email, status, raw_payload")
       .eq("external_id", payload.external_id)
       .maybeSingle();
 
@@ -116,6 +118,66 @@ async function ensureAccessCodeForOrder(order: CourseOrderRow): Promise<string |
   throw new Error("Unable to generate a unique access code.");
 }
 
+type AccessEmailMeta = {
+  access_code_email?: {
+    sent_at?: string;
+    email_id?: string;
+    recipient?: string;
+  };
+};
+
+function getAccessEmailMeta(rawPayload: unknown): AccessEmailMeta["access_code_email"] | null {
+  if (!rawPayload || typeof rawPayload !== "object" || Array.isArray(rawPayload)) {
+    return null;
+  }
+
+  const meta = (rawPayload as AccessEmailMeta).access_code_email;
+  return meta && typeof meta === "object" ? meta : null;
+}
+
+function mergeRawPayload(
+  payload: InvoiceWebhookPayload,
+  existingRawPayload: unknown,
+  accessCodeEmail?: NonNullable<AccessEmailMeta["access_code_email"]>,
+) {
+  const existingObject =
+    existingRawPayload && typeof existingRawPayload === "object" && !Array.isArray(existingRawPayload)
+      ? (existingRawPayload as Record<string, unknown>)
+      : {};
+
+  const nextPayload: Record<string, unknown> = {
+    ...existingObject,
+    ...payload,
+  };
+
+  const previousEmailMeta = getAccessEmailMeta(existingRawPayload);
+  if (previousEmailMeta || accessCodeEmail) {
+    nextPayload.access_code_email = {
+      ...(previousEmailMeta ?? {}),
+      ...(accessCodeEmail ?? {}),
+    };
+  }
+
+  return nextPayload;
+}
+
+async function loadCourseEmailDetails(courseId: string) {
+  const supabase = createServiceRoleClient();
+  const result = await supabase
+    .from("courses")
+    .select("title")
+    .eq("id", courseId)
+    .maybeSingle();
+
+  if (result.error) {
+    throw new Error(result.error.message);
+  }
+
+  return {
+    title: result.data?.title?.trim() || "DIBBI Course",
+  };
+}
+
 export async function POST(request: Request) {
   try {
     const verificationToken = process.env.XENDIT_WEBHOOK_VERIFICATION_TOKEN;
@@ -148,7 +210,6 @@ export async function POST(request: Request) {
 
     const orderUpdate: Record<string, unknown> = {
       status: finalStatus,
-      raw_payload: payload,
       payment_method:
         typeof payload.payment_method === "string" && payload.payment_method.trim()
           ? payload.payment_method
@@ -166,6 +227,8 @@ export async function POST(request: Request) {
           : new Date().toISOString();
     }
 
+    orderUpdate.raw_payload = mergeRawPayload(payload, order.raw_payload);
+
     const updateResult = await supabase
       .from("course_orders")
       .update(orderUpdate)
@@ -179,7 +242,51 @@ export async function POST(request: Request) {
     }
 
     if (finalStatus === "paid") {
-      await ensureAccessCodeForOrder(order);
+      const accessCode = await ensureAccessCodeForOrder(order);
+      const existingEmailMeta = getAccessEmailMeta(order.raw_payload);
+
+      if (accessCode && !existingEmailMeta?.sent_at) {
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+
+        if (!appUrl) {
+          console.error("Access code email skipped: missing NEXT_PUBLIC_APP_URL.");
+        } else {
+          try {
+            const course = await loadCourseEmailDetails(order.course_id);
+            const emailResult = await sendCourseAccessCodeEmail({
+              appUrl,
+              buyerEmail: order.buyer_email,
+              courseName: course.title,
+              accessCode,
+              orderId: order.id,
+            });
+
+            const emailPayload = mergeRawPayload(payload, order.raw_payload, {
+              sent_at: new Date().toISOString(),
+              email_id: emailResult.emailId,
+              recipient: order.buyer_email,
+            });
+
+            const emailUpdate = await supabase
+              .from("course_orders")
+              .update({ raw_payload: emailPayload })
+              .eq("id", order.id);
+
+            if (emailUpdate.error) {
+              console.error("Access code email sent but order metadata update failed", {
+                orderId: order.id,
+                error: emailUpdate.error.message,
+              });
+            }
+          } catch (error) {
+            console.error("Access code email send failed", {
+              orderId: order.id,
+              buyerEmail: order.buyer_email,
+              error: error instanceof Error ? error.message : String(error),
+            });
+          }
+        }
+      }
     }
 
     return NextResponse.json({ ok: true, status: finalStatus });

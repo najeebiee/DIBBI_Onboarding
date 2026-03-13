@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import CourseContentPanel from "@/components/course/CourseContentPanel";
+import CoursePageHeader from "@/components/course/CoursePageHeader";
 import CourseSidebar from "@/components/course/CourseSidebar";
 import { markLessonCompleteAction } from "@/app/course/[slug]/actions";
 import {
@@ -29,6 +30,12 @@ function parseLessonNumber(rawLesson: string | string[] | undefined): number | n
   if (!Number.isFinite(parsed)) return null;
   const lessonNumber = Math.trunc(parsed);
   return lessonNumber > 0 ? lessonNumber : null;
+}
+
+function getUserInitial(email: string | undefined): string {
+  if (!email) return "U";
+  const initial = email.trim().charAt(0).toUpperCase();
+  return initial || "U";
 }
 
 export default async function CourseDetailPage({
@@ -70,11 +77,14 @@ export default async function CourseDetailPage({
 
   return (
     <main className="min-h-screen bg-[#eef3fa]">
-      <section className="mx-auto w-full max-w-screen-2xl px-4 pb-10 pt-8 sm:px-6 lg:px-10 lg:pt-10">
-        <h1 className="text-3xl font-extrabold tracking-tight text-[#102754] sm:text-[34px]">
-          {coursePageData.courseTitle}
-        </h1>
-
+      <CoursePageHeader
+        courseTitle={coursePageData.courseTitle}
+        progressPercent={coursePageData.sidebar.progressPercent}
+        completedLessons={coursePageData.sidebar.completedLessons}
+        totalLessons={coursePageData.sidebar.totalLessons}
+        userInitial={getUserInitial(userResult.data.user.email)}
+      />
+      <section className="mx-auto w-full max-w-screen-2xl px-4 pb-10 pt-6 sm:px-6 lg:px-10 lg:pt-8">
         <div className="mt-6 grid grid-cols-1 gap-6 lg:mt-8 lg:grid-cols-[320px_1fr] lg:gap-8 xl:grid-cols-[340px_1fr]">
           <CourseSidebar
             coachName={coursePageData.sidebar.coachName}
