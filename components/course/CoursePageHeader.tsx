@@ -50,14 +50,6 @@ export default function CoursePageHeader({
       </div>
 
       <div className="mx-auto flex w-full max-w-screen-2xl flex-col gap-3 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
-        <nav className="flex min-w-0 flex-wrap items-center gap-2 text-sm font-medium text-[#6a7f9f]">
-          <Link href="/courses?tab=enrollments" className="transition hover:text-[#102754]">
-            Courses
-          </Link>
-          <span aria-hidden="true">/</span>
-          <span className="truncate text-[#102754]">{courseTitle}</span>
-        </nav>
-
         <Link
           href="/courses?tab=enrollments"
           className="inline-flex h-10 shrink-0 items-center justify-center rounded-lg border border-[#d7e2f0] bg-[#f7faff] px-4 text-sm font-semibold text-[#102754] transition hover:border-[#bfd0ea] hover:bg-[#f1f6ff]"
@@ -67,6 +59,14 @@ export default function CoursePageHeader({
           </span>
           Back to Courses
         </Link>
+
+        <nav className="flex min-w-0 flex-wrap items-center gap-2 text-sm font-medium text-[#6a7f9f]">
+          <Link href="/courses?tab=enrollments" className="transition hover:text-[#102754]">
+            Courses
+          </Link>
+          <span aria-hidden="true">/</span>
+          <span className="truncate text-[#102754]">{courseTitle}</span>
+        </nav>
       </div>
     </header>
   );
