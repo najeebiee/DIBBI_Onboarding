@@ -79,9 +79,6 @@ export default async function CourseDetailPage({
     <main className="min-h-screen bg-[#eef3fa]">
       <CoursePageHeader
         courseTitle={coursePageData.courseTitle}
-        progressPercent={coursePageData.sidebar.progressPercent}
-        completedLessons={coursePageData.sidebar.completedLessons}
-        totalLessons={coursePageData.sidebar.totalLessons}
         userInitial={getUserInitial(userResult.data.user.email)}
       />
       <section className="mx-auto w-full max-w-screen-2xl px-4 pb-10 pt-6 sm:px-6 lg:px-10 lg:pt-8">
