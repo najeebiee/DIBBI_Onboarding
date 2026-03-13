@@ -1,4 +1,4 @@
-import Link from "next/link";
+import LoadingLink from "@/components/ui/LoadingLink";
 
 type CourseNavButtonsProps = {
   previousHref: string | null;
@@ -12,12 +12,14 @@ export default function CourseNavButtons({
   return (
     <div className="grid grid-cols-2 gap-2">
       {previousHref ? (
-        <Link
+        <LoadingLink
           href={previousHref}
+          loadingLabel="Loading..."
+          disabledClassName="pointer-events-none cursor-not-allowed opacity-70"
           className="inline-flex h-9 items-center justify-center rounded-lg border border-[#d9e3f2] bg-[#f2f6fc] text-sm font-semibold text-[#4e6382] transition hover:bg-[#e9f0fb]"
         >
           Previous
-        </Link>
+        </LoadingLink>
       ) : (
         <span className="inline-flex h-9 items-center justify-center rounded-lg border border-[#d9e3f2] bg-[#f2f6fc] text-sm font-semibold text-[#8ca0bf]">
           Previous
@@ -25,12 +27,14 @@ export default function CourseNavButtons({
       )}
 
       {nextHref ? (
-        <Link
+        <LoadingLink
           href={nextHref}
+          loadingLabel="Loading..."
+          disabledClassName="pointer-events-none cursor-not-allowed opacity-70"
           className="inline-flex h-9 items-center justify-center rounded-lg bg-[#0b63ff] text-sm font-semibold text-white transition hover:brightness-105"
         >
           Next
-        </Link>
+        </LoadingLink>
       ) : (
         <span className="inline-flex h-9 items-center justify-center rounded-lg bg-[#8bb8ff] text-sm font-semibold text-white">
           Next

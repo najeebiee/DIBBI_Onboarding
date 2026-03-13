@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import LoadingButton from "@/components/ui/LoadingButton";
 import { normalizeUsernameForAuth } from "@/lib/auth/usernameToInternalEmail";
 
 type SignupResponse = {
@@ -166,13 +167,14 @@ export default function SignupForm({ defaultCode = "" }: SignupFormProps) {
           </p>
         )}
 
-        <button
+        <LoadingButton
           type="submit"
-          disabled={isSubmitting}
+          isLoading={isSubmitting}
+          loadingLabel="Creating account..."
           className="mt-6 h-12 w-full rounded-md bg-[#010a41] text-[17px] font-bold text-white transition hover:bg-[#1a255d] disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isSubmitting ? "Creating account..." : "Sign up"}
-        </button>
+          Sign up
+        </LoadingButton>
 
         <p className="mt-4 text-center text-sm text-slate-600">
           Already have an account?{" "}

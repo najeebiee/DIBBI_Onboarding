@@ -5,19 +5,21 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { redeemCodeAction } from "@/app/redeem-code/actions";
 import { initialRedeemCodeState } from "@/app/redeem-code/state";
+import LoadingButton from "@/components/ui/LoadingButton";
 import { normalizeAccessCode } from "@/lib/xendit/utils";
 
 function RedeemSubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button
+    <LoadingButton
       type="submit"
-      disabled={pending}
+      isLoading={pending}
+      loadingLabel="Redeeming..."
       className="mt-5 h-12 w-full rounded-md bg-[#010a41] text-[16px] font-bold text-white transition hover:bg-[#1a255d] disabled:cursor-not-allowed disabled:opacity-60"
     >
-      {pending ? "Redeeming code..." : "Redeem code"}
-    </button>
+      Redeem code
+    </LoadingButton>
   );
 }
 

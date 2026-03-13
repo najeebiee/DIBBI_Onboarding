@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 import CourseProgressBar from "@/components/courses/CourseProgressBar";
+import LoadingLink from "@/components/ui/LoadingLink";
 import type { CourseListItem } from "@/types/course";
 
 type CourseCardProps = {
@@ -62,8 +62,10 @@ export default function CourseCard({ course, isExploreTab }: CourseCardProps) {
             <span>{course.totalLessons} lessons</span>
           </p>
 
-          <Link
+          <LoadingLink
             href={ctaHref}
+            loadingLabel={course.isUnlocked ? "Loading..." : "Redirecting..."}
+            disabledClassName="pointer-events-none cursor-not-allowed opacity-70"
             className="inline-flex items-center gap-2 rounded-lg bg-[#0b63ff] px-4 py-2 text-sm font-semibold text-white transition hover:brightness-105"
           >
             {isExploreTab && !course.isUnlocked ? "Get Access" : ctaLabel}
@@ -75,7 +77,7 @@ export default function CourseCard({ course, isExploreTab }: CourseCardProps) {
             >
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
-          </Link>
+          </LoadingLink>
         </div>
       </div>
     </article>

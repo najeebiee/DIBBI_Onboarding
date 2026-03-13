@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import LoadingButton from "@/components/ui/LoadingButton";
 
 type CreateInvoiceResponse = {
   success: boolean;
@@ -90,16 +91,17 @@ export default function CheckoutForm({
         }
       />
 
-      <button
+      <LoadingButton
         type="submit"
-        disabled={isLoading}
+        isLoading={isLoading}
+        loadingLabel="Processing..."
         className={
           buttonClassName ??
           "mt-3 h-12 w-full rounded-lg bg-[#16A34A] px-4 text-sm font-semibold text-white transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-70"
         }
       >
-        {isLoading ? "Preparing secure checkout..." : buttonLabel}
-      </button>
+        {buttonLabel}
+      </LoadingButton>
 
       {errorMessage && (
         <p className="mt-3 rounded-md border border-rose-300 bg-rose-50 px-3 py-2 text-sm text-rose-700">

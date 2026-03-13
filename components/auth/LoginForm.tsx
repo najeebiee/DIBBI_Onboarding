@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Session } from "@supabase/supabase-js";
+import LoadingButton from "@/components/ui/LoadingButton";
 import { usernameToInternalEmail } from "@/lib/auth/usernameToInternalEmail";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 
@@ -161,13 +162,14 @@ export default function LoginForm({ defaultCode = "" }: LoginFormProps) {
           </p>
         )}
 
-        <button
+        <LoadingButton
           type="submit"
-          disabled={isSubmitting}
+          isLoading={isSubmitting}
+          loadingLabel="Signing in..."
           className="mt-6 h-12 w-full rounded-md bg-[#010a41] text-[17px] font-bold text-white transition hover:bg-[#1a255d] disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isSubmitting ? "Signing in..." : "Login"}
-        </button>
+          Login
+        </LoadingButton>
 
         <p className="mt-4 text-center text-sm text-slate-600">
           Need an account?{" "}
