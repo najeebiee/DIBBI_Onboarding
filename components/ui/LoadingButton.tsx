@@ -29,7 +29,7 @@ export default function LoadingButton({
       aria-busy={isLoading}
       className={className}
     >
-      <span className="inline-flex items-center justify-center gap-2">
+      <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap">
         {isLoading ? (
           <span
             aria-hidden="true"
@@ -39,7 +39,9 @@ export default function LoadingButton({
             )}
           />
         ) : null}
-        <span>{isLoading ? loadingLabel : children}</span>
+        <span className="inline-flex items-center gap-2 whitespace-nowrap">
+          {isLoading ? loadingLabel : children}
+        </span>
       </span>
     </button>
   );

@@ -51,7 +51,7 @@ export default function LoadingLink({
       onClick={handleClick}
       className={joinClassNames(className, isLoading && disabledClassName)}
     >
-      <span className="inline-flex items-center justify-center gap-2">
+      <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap">
         {isLoading ? (
           <span
             aria-hidden="true"
@@ -61,7 +61,9 @@ export default function LoadingLink({
             )}
           />
         ) : null}
-        <span>{isLoading ? loadingLabel : children}</span>
+        <span className="inline-flex items-center gap-2 whitespace-nowrap">
+          {isLoading ? loadingLabel : children}
+        </span>
       </span>
     </Link>
   );
