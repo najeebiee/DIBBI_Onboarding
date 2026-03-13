@@ -13,6 +13,7 @@ export default function CourseNavButtons({
     <div className="grid grid-cols-2 gap-2">
       {previousHref ? (
         <LoadingLink
+          key={previousHref}
           href={previousHref}
           loadingLabel="Loading..."
           disabledClassName="pointer-events-none cursor-not-allowed opacity-70"
@@ -28,6 +29,7 @@ export default function CourseNavButtons({
 
       {nextHref ? (
         <LoadingLink
+          key={nextHref}
           href={nextHref}
           loadingLabel="Loading..."
           disabledClassName="pointer-events-none cursor-not-allowed opacity-70"
