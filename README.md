@@ -102,6 +102,10 @@ http://localhost:3000
 
 <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/3353abd7-9f15-45c1-9302-92b75d840a88" />
 
+### Course Content Page
+
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/e220aad4-230a-416b-98cf-cb801510b69b" />
+
 
 ## Author
 
