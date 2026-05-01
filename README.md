@@ -98,6 +98,11 @@ http://localhost:3000
 
 <img width="1440" height="900" alt="Payment page" src="public/screenshots/payment.png" />
 
+### Courses Page
+
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/3353abd7-9f15-45c1-9302-92b75d840a88" />
+
+
 ## Author
 
 Najeeb C. Mapantas
